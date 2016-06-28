@@ -1,0 +1,3 @@
+insert into Address(zip_code, street, neighborhood, city, state) values ('04675010', 'Av. Dr. Silva Melo', 'Jd. Taquaral', 'Sao Paulo', 'Sao Paulo');
+insert into Address(zip_code, street, neighborhood, city, state) values ('79002240', 'Rua Dr. Ferreira', 'Centro', 'Campo Grande', 'Mato Grosso do Sul');
+insert into Address(zip_code, street, neighborhood, city, state) values ('22333900', 'Av. Mouse Teclado', 'Centro', 'Sao Paulo', 'Sao Paulo');
