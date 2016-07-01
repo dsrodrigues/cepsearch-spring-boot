@@ -1,11 +1,11 @@
 package me.dsrodrigues.cepsearch.service.impl;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import me.dsrodrigues.cepsearch.domain.Address;
-import me.dsrodrigues.cepsearch.exception.InvalidZipCodeException;
+import me.dsrodrigues.cepsearch.domain.ZipCode;
+import me.dsrodrigues.cepsearch.exception.NotFoundZipCodeException;
 import me.dsrodrigues.cepsearch.repository.AddressRepository;
 import me.dsrodrigues.cepsearch.service.AddressService;
 
@@ -29,37 +29,14 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	@Transactional
-	public Address save(@NotNull @Valid final Address address) {
-		LOGGER.debug("Creating {}", address);
-		return repository.save(address);
-	}
-
-	@Override
 	@Transactional(readOnly = true)
-	public Address findByZipCode(@NotNull String zipCode) {
+	public Address findByZipCode(@NotNull ZipCode zipCode) {
 		LOGGER.debug("findByZipCode {}", zipCode);
 		Address address = repository.findByZipCode(zipCode);
-		for (StringBuilder zip = new StringBuilder(zipCode); address == null && !isZipCodeSufixZero(zip); fillZeroRight(zip)) {
-			address = repository.findByZipCode(zip.toString());
-		}
+		if (address == null && zipCode.hasNext())
+			address = this.findByZipCode(zipCode.next());
 		if (address == null)
-			throw new InvalidZipCodeException("Invalid Zip Code");
+			throw new NotFoundZipCodeException("Not Found Zip Code");
 		return address;
 	}
-
-	private StringBuilder fillZeroRight(StringBuilder zip) {
-		for (int i = zip.length(); i >= 0; i--) {
-			if (zip.charAt(i - 1) != '0') {
-				zip.replace(i - 1, i, "0");
-				break;
-			}
-		}
-		return zip;
-	}
-
-	private boolean isZipCodeSufixZero(StringBuilder zip) {
-		return zip.toString().substring(5).matches("[0]+");
-	}
-
 }

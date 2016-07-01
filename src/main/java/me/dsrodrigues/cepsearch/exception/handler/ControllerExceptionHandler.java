@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.dsrodrigues.cepsearch.exception.InvalidZipCodeException;
+import me.dsrodrigues.cepsearch.exception.NotFoundZipCodeException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,14 @@ public class ControllerExceptionHandler extends DefaultHandlerExceptionResolver 
 	@ExceptionHandler(InvalidZipCodeException.class)
 	void handleInvalidZipCodeException(InvalidZipCodeException e, HttpServletResponse response) throws IOException {
 		response.setStatus(HttpStatus.BAD_REQUEST.value());
+		Errors errors = Errors.valueOf(response.getStatus(), e.getMessage());
+		writeErrorResponse(errors, response);
+	}
+
+	@ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+	@ExceptionHandler(NotFoundZipCodeException.class)
+	void handleNotFoundZipCodeException(NotFoundZipCodeException e, HttpServletResponse response) throws IOException {
+		response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
 		Errors errors = Errors.valueOf(response.getStatus(), e.getMessage());
 		writeErrorResponse(errors, response);
 	}

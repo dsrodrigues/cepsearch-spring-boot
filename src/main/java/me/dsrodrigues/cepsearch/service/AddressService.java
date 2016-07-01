@@ -1,10 +1,8 @@
 package me.dsrodrigues.cepsearch.service;
 
 import me.dsrodrigues.cepsearch.domain.Address;
+import me.dsrodrigues.cepsearch.domain.ZipCode;
 
 public interface AddressService {
-
-	Address save(Address address);
-	
-	Address findByZipCode(String zipCode);
+	Address findByZipCode(ZipCode zipCode);
 }

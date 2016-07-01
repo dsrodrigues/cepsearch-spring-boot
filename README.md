@@ -28,7 +28,7 @@ Access the project via: http://localhost:8080/
 ### ZipCode
 
 **Valid Examples**
-- **Zip Codes:** 04675010, 79002240, 22333900
+- **Zip Codes:** 04675010, 79002240, 22333900, 12345678, 22345678, 32345678, 42345678
 
 **Request**
 - **GET:** /address/?zipcode={zipcode}
@@ -58,6 +58,16 @@ OR
 	"errors":[
 		{
 			"message": "Invalid Zip Code"
+		}
+	]
+}
+```
+```html
+{
+	"statusCode": 400,
+	"errors":[
+		{
+			"message": "Not Found Zip Code"
 		}
 	]
 }
