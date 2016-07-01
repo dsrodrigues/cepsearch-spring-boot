@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import me.dsrodrigues.cepsearch.repository.converter.ZipCodeConverter;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.BeanUtils;
 
 @Entity
 @Data
@@ -60,4 +61,9 @@ public class Address implements Serializable {
 	@Size(max = 25)
 	@Column
 	private String state;
+
+	public Address update(Address newAddress) {
+		BeanUtils.copyProperties(newAddress, this, "id");
+		return this;
+	}
 }

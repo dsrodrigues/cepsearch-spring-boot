@@ -1,6 +1,7 @@
 package me.dsrodrigues.cepsearch.service.impl;
 
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import me.dsrodrigues.cepsearch.domain.Address;
@@ -38,5 +39,35 @@ public class AddressServiceImpl implements AddressService {
 		if (address == null)
 			throw new NotFoundZipCodeException("Not Found Zip Code");
 		return address;
+	}
+
+	@Override
+	@Transactional
+	public void create(Address address) {
+		LOGGER.debug("create {}", address);
+		repository.save(address);
+	}
+
+	@Override
+	public Address find(Long id) {
+		LOGGER.debug("find {}", id);
+		Address address = repository.findOne(id);
+		if (address == null)
+			throw new EntityNotFoundException("Address ID " + id + " Not Found");
+		return address;
+	}
+
+	@Override
+	public void update(Long id, Address newAddress) {
+		LOGGER.debug("update {}", newAddress);
+		Address address = this.find(id);
+		repository.save(address.update(newAddress));
+	}
+
+	@Override
+	public void delete(Long id) {
+		LOGGER.debug("delete {}", id);
+		Address address = this.find(id);
+		repository.delete(address);
 	}
 }
